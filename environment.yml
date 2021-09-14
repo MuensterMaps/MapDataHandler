@@ -1,0 +1,11 @@
+name: gpd_env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - numpy
+  - scipy
+  - matplotlib
+  - geopandas
+  - contextily
+  - rasterio
