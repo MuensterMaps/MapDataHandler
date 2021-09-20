@@ -11,6 +11,7 @@ import contextily as ctx
 import matplotlib.pyplot as plt
 import geopandas as gpd
 
+
 # TODO: this should be done in a more elegant way!
 EXPECTED_INCREMENT = 0.07464553543395595
 
