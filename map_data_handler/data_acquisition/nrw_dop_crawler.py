@@ -26,14 +26,14 @@ def load_geo_dataframe(path, sample_size):
     return df_reset.to_crs(4326)
 
 
-def crawl(shape_path, out_path, sample_size):
+def crawl(shape_path, base_out_path, sample_size):
     df = load_geo_dataframe(shape_path, sample_size)
     provider = NrwWmsPatchProvider(resolution=20)
     print('Starting')
     for idx, row in df.iterrows():
         if idx % 100 == 0:
             print(f'Index: {idx}')
-        out_path = os.path.join(out_path, f'{idx:08d}.h5')
+        out_path = os.path.join(base_out_path, f'{idx:08d}.h5')
         poly_ = row['geometry']
 
         try:
