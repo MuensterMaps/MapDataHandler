@@ -29,21 +29,22 @@ def load_geo_dataframe(path, sample_size):
 def crawl(shape_path, base_out_path, sample_size):
     df = load_geo_dataframe(shape_path, sample_size)
     provider = NrwWmsPatchProvider(resolution=20)
+    idx = 0
     print('Starting')
-    for idx, row in df.iterrows():
+    for _, row in df.iterrows():
         if idx % 100 == 0:
             print(f'Index: {idx}')
-        out_path = os.path.join(base_out_path, f'{idx:08d}.h5')
-        poly_ = row['geometry']
-
         try:
+            poly_ = row['geometry']
             geo_patch = provider.from_polygons_and_size(poly_, (512, 512))
             X = np.concatenate((geo_patch.patch, geo_patch.hull_mask[..., np.newaxis]), axis=2)
             attrs = row.drop('geometry').to_dict()
+            out_path = os.path.join(base_out_path, f'{idx:08d}.h5')
             with h5py.File(out_path, 'w') as h5f:
                 h5f.create_dataset("X", data=X)
                 for key_, val_ in attrs.items():
                     h5f['X'].attrs[key_] = val_
+            idx += 1
         except Exception as e:
             print(f'ERROR at {idx} | {str(repr(e))}')
 
